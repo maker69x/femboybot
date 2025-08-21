@@ -42,21 +42,21 @@ def delete_username_db(user_id: int):
 # --- Bot Handlers ---
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "👋 Welcome! Set your nickname with /setusername <name>.\n"
-        "If you change it, your old name will be freed for others."
+        "привіт фембойчікі, щоб написати повідомлення анонімно просто надішліть його сюди \n
+        щоб створити юзернейм, напишіть /setusername і ваш бажаний юзер"
     )
 
 async def set_username(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
     if not context.args:
-        await update.message.reply_text("❗ Usage: /setusername <your_name>")
+        await update.message.reply_text("ви не вибрали юзернейм")
         return
 
     new_username = " ".join(context.args)
 
     # Check if taken
     if is_username_taken(new_username, user_id):
-        await update.message.reply_text("🚫 This username is already taken. Try another.")
+        await update.message.reply_text("🚫 зайнято")
         return
 
     # Free old username
@@ -64,14 +64,14 @@ async def set_username(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Assign new one
     set_username_db(user_id, new_username)
-    await update.message.reply_text(f"✅ Your username is now: {new_username}")
+    await update.message.reply_text(f"✅ твій юзер: {new_username}")
 
 async def forward_to_channel(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
     username = get_username_db(user_id) or update.message.from_user.first_name
 
     if update.message.text:
-        msg = f"📝 {username}:\n{update.message.text}"
+        msg = f"{username}:\n{update.message.text}"
         await context.bot.send_message(chat_id=CHANNEL_ID, text=msg)
 
     elif update.message.photo:
@@ -86,7 +86,7 @@ async def forward_to_channel(update: Update, context: ContextTypes.DEFAULT_TYPE)
         )
 
     else:
-        await update.message.reply_text("⚠️ Only text & photos supported right now.")
+        await update.message.reply_text("⚠️ зараз підтримуються лише текст та фото")
 
 # --- Main ---
 def main():
