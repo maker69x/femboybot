@@ -42,8 +42,8 @@ def delete_username_db(user_id: int):
 # --- Bot Handlers ---
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "привіт фембойчікі, щоб написати повідомлення анонімно просто надішліть його сюди \n
-        щоб створити юзернейм, напишіть /setusername і ваш бажаний юзер"
+        "привіт фембойчікі, щоб написати повідомлення анонімно просто надішліть його сюди \n"
+        "щоб створити юзернейм, напишіть /setusername і ваш бажаний юзер"
     )
 
 async def set_username(update: Update, context: ContextTypes.DEFAULT_TYPE):
