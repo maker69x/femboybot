@@ -5,7 +5,6 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 BOT_TOKEN = "7665533003:AAFFiM9qeQIYbU4Q8b50_BiKmAlHI6b9vX8"
 CHANNEL_ID = "@femboy_house69"
 
-# --- Database setup ---
 conn = sqlite3.connect("usernames.db", check_same_thread=False)
 cursor = conn.cursor()
 cursor.execute("""
@@ -16,7 +15,6 @@ CREATE TABLE IF NOT EXISTS usernames (
 """)
 conn.commit()
 
-# --- Helper Functions ---
 def set_username_db(user_id: int, username: str) -> bool:
     try:
         cursor.execute("INSERT OR REPLACE INTO usernames (user_id, username) VALUES (?, ?)", (user_id, username))
@@ -39,12 +37,8 @@ def delete_username_db(user_id: int):
     cursor.execute("DELETE FROM usernames WHERE user_id = ?", (user_id,))
     conn.commit()
 
-# --- Bot Handlers ---
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(
-        "привіт фембойчікі, щоб написати повідомлення анонімно просто надішліть його сюди \n"
-        "щоб створити юзернейм, напишіть /setusername і ваш бажаний юзер"
-    )
+    await update.message.reply_text("привіт фембойчікі, щоб написати повідомлення анонімно просто надішліть його сюди \n щоб створити юзернейм, напишіть /setusername і ваш бажаний юзер")
 
 async def set_username(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.message.from_user.id
@@ -54,15 +48,12 @@ async def set_username(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     new_username = " ".join(context.args)
 
-    # Check if taken
     if is_username_taken(new_username, user_id):
         await update.message.reply_text("🚫 зайнято")
         return
 
-    # Free old username
     delete_username_db(user_id)
 
-    # Assign new one
     set_username_db(user_id, new_username)
     await update.message.reply_text(f"✅ твій юзер: {new_username}")
 
@@ -95,8 +86,6 @@ def main():
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("setusername", set_username))
     app.add_handler(MessageHandler(filters.ALL & ~filters.COMMAND, forward_to_channel))
-
-    print("Bot is running...")
     app.run_polling()
 
 if __name__ == "__main__":
