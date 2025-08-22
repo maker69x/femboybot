@@ -95,10 +95,10 @@ async def forward_to_channel(update: Update, context: ContextTypes.DEFAULT_TYPE)
     else:
         await update.message.reply_text("⚠️ зараз підтримуються лише текст та фото")
 
-# --- Main ---
 def main():
     app = Application.builder().token(BOT_TOKEN).build()
 
+    app.add_handler(CommandHandler("info", info)
     app.add_handler(CommandHandler("deleteusername", delete_username))
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("setusername", set_username))
