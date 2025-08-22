@@ -62,11 +62,11 @@ async def forward_to_channel(update: Update, context: ContextTypes.DEFAULT_TYPE)
     username = get_username_db(user_id) or update.message.from_user.first_name
 
     if update.message.text:
-        msg = f"{username}:\n{update.message.text}"
+        msg = f"{update.message.text}"
         await context.bot.send_message(chat_id=CHANNEL_ID, text=msg)
 
     elif update.message.photo:
-        caption = f"📸 {username}"
+        caption = f"📸"
         if update.message.caption:
             caption += f":\n{update.message.caption}"
 
